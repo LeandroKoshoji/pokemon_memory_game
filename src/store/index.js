@@ -29,6 +29,7 @@ export default new Vuex.Store({
       try {
         commit('setLoading', true)
         const data = await Promise.all(pokemonsPromises)
+        console.log(data)
         commit('setPokemons', data)
       } catch (err) {
         commit('setError', err.message)
