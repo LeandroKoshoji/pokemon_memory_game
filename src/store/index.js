@@ -30,7 +30,7 @@ export default new Vuex.Store({
         commit('setLoading', true)
         const data = await Promise.all(pokemonsPromises)
         console.log(data)
-        commit('setPokemons', data)
+        commit('setPokemons', [...data, ...data])
       } catch (err) {
         commit('setError', err.message)
       } finally {
