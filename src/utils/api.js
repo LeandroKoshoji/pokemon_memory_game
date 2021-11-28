@@ -11,6 +11,16 @@ export const getRandomNumber = (min, max) => {
 }
 
 export const generateArrayWithPokemonsID = (qntd) => {
-    return Array(qntd).fill().map(()=> getRandomNumber(1, pokemonsAmount))
+    const arr = new Set(Array(qntd).fill().map(()=> Number(getRandomNumber(1, pokemonsAmount))))
+
+    while(arr.size !== qntd) {
+        arr.add(getRandomNumber(1, pokemonsAmount))
+    }
+    
+    let pokemonsIDArray = []
+
+    arr.forEach(id => pokemonsIDArray.push(Number(id)))
+
+    return pokemonsIDArray
 }
 
