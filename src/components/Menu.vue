@@ -30,7 +30,7 @@ export default {
   name: "Menu",
   props: {
     isVisible: {
-      default: true,
+      default: false,
     },
   },
 };
@@ -45,6 +45,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 99;
 
   .menu {
     position: relative;
@@ -58,6 +59,7 @@ export default {
     .game-title {
       text-align: center;
       padding-bottom: 2rem;
+      font-family: 'Acme', sans-serif;
     }
 
     .instructions-title,
