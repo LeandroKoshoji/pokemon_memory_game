@@ -11,16 +11,38 @@
         Pokemon.
       </p>
       <p class="difficulty-title">Choose difficulty:</p>
-      <form class="form">
+      <form class="form" @submit.prevent="handleSubmit()">
         <div class="difficulties">
-          <input type="radio" id="easy" name="difficulty" value="8" checked />
+          <input
+            type="radio"
+            id="easy"
+            name="difficulty"
+            value="8"
+            checked
+            v-model="difficulty"
+          />
           <label for="easy">Easy</label>
-          <input type="radio" id="medium" name="difficulty" value="12" />
+          <input
+            type="radio"
+            id="medium"
+            name="difficulty"
+            value="12"
+            v-model="difficulty"
+          />
           <label for="medium">Medium</label>
-          <input type="radio" id="hard" name="difficulty" value="16" />
+          <input
+            type="radio"
+            id="hard"
+            name="difficulty"
+            value="16"
+            v-model="difficulty"
+          />
           <label for="hard">Hard</label>
         </div>
         <button type="submit">Start the Game</button>
+        <p class="error">
+          {{ emptyError }}
+        </p>
       </form>
     </div>
   </div>
@@ -31,6 +53,22 @@ export default {
   props: {
     isVisible: {
       default: false,
+    },
+  },
+  data() {
+    return {
+      difficulty: null,
+      emptyError: "",
+    };
+  },
+  methods: {
+    handleSubmit() {
+      if (this.difficulty) {
+        this.$emit("start-game", this.difficulty);
+        this.emptyError = "";
+        return;
+      }
+      this.emptyError = "Please, choose the difficulty";
     },
   },
 };
@@ -53,20 +91,20 @@ export default {
     width: 100%;
     max-width: 500px;
     padding: 1rem;
-    border: 5px solid#e12f34;
-    border-radius: 10px;
+    border: 3px solid#e12f34;
+    border-radius: 5px;
 
     .game-title {
       text-align: center;
       padding-bottom: 2rem;
-      font-family: 'Acme', sans-serif;
+      font-family: "Acme", sans-serif;
     }
 
     .instructions-title,
     .difficulty-title {
-        font-weight: bold;
-        text-decoration: underline;
-        text-decoration-color: #e12f34;
+      font-weight: bold;
+      text-decoration: underline;
+      text-decoration-color: #e12f34;
     }
 
     .instructions-desc {
@@ -128,6 +166,14 @@ export default {
           color: white;
           border: 2px solid black;
         }
+      }
+
+      .error {
+        padding-top: 0.5rem;
+        text-align: center;
+        font-weight: 700;
+        color: red;
+        font-size: 0.75rem;
       }
     }
   }
