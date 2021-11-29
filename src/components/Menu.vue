@@ -154,6 +154,7 @@ export default {
         font-size: 1rem;
         font-weight: 700;
         background-color: white;
+        color: #000;
         border: 2px solid #e12f34;
         padding: 0.5rem 1rem;
         border-radius: 10px;

@@ -20,6 +20,12 @@
   margin: 0 auto;
 }
 
+body {
+  min-height: 100vh;
+  background-color: #fff;
+  color: #000;
+}
+
 img {
   display: block;
   width: 100%;
