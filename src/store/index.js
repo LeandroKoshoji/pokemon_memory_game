@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { getPokemonUrl,  generateArrayWithPokemonsID} from '@/utils/api.js'
+import _ from 'lodash'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -30,7 +31,20 @@ export default new Vuex.Store({
         commit('setLoading', true)
         const data = await Promise.all(pokemonsPromises)
         console.log(data)
-        commit('setPokemons', [...data, ...data])
+        const baseData = data.map(data => {
+          return {
+            id: data.id,
+            name: data.name,
+            images: data.sprites,
+            types: data.types,
+            visible: false,
+            matched: false
+          }
+        })
+        //create deep clone of the baseData
+        const pairData = JSON.parse(JSON.stringify(baseData))
+        
+        commit('setPokemons', _.shuffle([...baseData, ...pairData]))
       } catch (err) {
         commit('setError', err.message)
       } finally {
