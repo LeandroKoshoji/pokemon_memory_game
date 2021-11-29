@@ -1,15 +1,11 @@
 <template>
-  <div class="card">
-    <div class="card-inner" :class="isCardFlipped" @click="flipCard()">
+  <div class="card" @click="selectCard()" :class="disable ? 'disable' : ''">
+    <div class="card-inner" :class="isCardFlipped">
       <div class="card-face is-front" :class="pokemonFirstType">
         <div class="card-content">
-          <img
-            :src="pokemon.sprites.front_default"
-            alt=""
-            class="pokemon_img"
-          />
-          <p class="pokemon_name" v-if="!isMobile">{{ pokemonName }}</p>
-          <p class="pokemon_type" v-if="!isMobile">
+          <img :src="pokemon.images.front_default" alt="" class="pokemon_img" />
+          <p class="pokemon_name" v-if="!isWidthLowerThan1024">{{ pokemonName }}</p>
+          <p class="pokemon_type" v-if="!isWidthLowerThan1024">
             {{ pokemonTypes }}
           </p>
         </div>
@@ -31,21 +27,32 @@ export default {
     },
     visible: {
       type: Boolean,
-      default: true,
+      default: false,
+    },
+    position: {
+      require: true,
+    },
+    cardValue: {
+      require: true,
+    },
+    matched: {
+      require: true,
+      default: false,
+    },
+    disable: {
+      type: Boolean,
+      default: false,
     },
   },
-  data(){
-      return {
-          isMobile: null,
-          windowSize: null
-      }
+  data() {
+    return {
+      isWidthLowerThan1024: null,
+      windowWidth: null,
+    };
   },
   computed: {
     isCardFlipped() {
-      if (this.visible) {
-        return "is-flipped";
-      }
-      return "";
+      return this.visible ? "is-flipped" : ""
     },
     pokemonFirstType() {
       // This is for the background-color based on pokemon first class
@@ -67,32 +74,34 @@ export default {
     },
   },
   methods: {
-    flipCard() {
-      this.visible = !this.visible;
+    selectCard() {
+      this.$emit("select-card", {
+        position: this.position,
+        cardValue: this.cardValue,
+        matched: this.matched,
+      });
     },
     checkScreen() {
-        this.windowSize = window.innerWidth
-        if(this.windowSize <= 750) {
-            this.isMobile = true
-            return
-        }
-        this.isMobile = false
-        return
-    }
+      this.windowWidth = window.innerWidth;
+      this.isWidthLowerThan1024 = this.windowWidth <= 1024 
+        ? true : false
+    },
   },
-  created(){
-      window.addEventListener('resize', this.checkScreen)
-      this.checkScreen()
+  created() {
+    window.addEventListener("resize", this.checkScreen);
+    this.checkScreen();
   },
-  
 };
 </script>
 
 <style lang="scss" scoped>
 .card {
   width: auto;
-  max-width: 150px;
   aspect-ratio: 1;
+
+  &.disable {
+    pointer-events: none;
+  }
 
   .card-inner {
     width: 100%;
@@ -113,8 +122,8 @@ export default {
     height: 100%;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    border-radius: 10px;
-    box-shadow: 0px 3px 10px 3px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 
     &.is-front {
       transform: rotateY(180deg);
@@ -137,7 +146,6 @@ export default {
           text-align: center;
         }
         .pokemon_type {
-          padding-top: 1rem;
           font-size: 0.75rem;
           text-align: center;
         }
@@ -208,7 +216,7 @@ export default {
     &.is-back {
       font-family: "Acme", sans-serif;
       font-size: clamp(0.75rem, 2vw, 1rem);
-      border: 3px solid black;
+      // border: 3px solid black;
       background-color: #e12f34;
       color: white;
       display: flex;
