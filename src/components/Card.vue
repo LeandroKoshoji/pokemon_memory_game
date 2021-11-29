@@ -97,8 +97,11 @@ export default {
 <style lang="scss" scoped>
 .card {
   width: auto;
-  aspect-ratio: 1;
+  height: 180px;
 
+  @media (max-width: 575.98px) {
+    height: 100px;
+  }
   &.disable {
     pointer-events: none;
   }
